@@ -2,6 +2,8 @@
 
 namespace Core\Render;
 
+use Core\Session\Session;
+
 class PHPRender
 {
 

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Core\DCI\Container;
+use Core\DCI\AutoWiring;
 use Core\Form\Button;
 use Core\Form\Form;
 use Core\Form\Input;

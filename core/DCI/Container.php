@@ -2,36 +2,47 @@
 
 namespace Core\DCI;
 
-use ReflectionException;
-
 class Container
 {
 
+    /**
+     * @var array
+     */
+    private array $services = [];
 
     /**
-     * @param string $id
-     * @return string|object|null
-     * @throws ReflectionException
+     * @var array
      */
-    public function get(string $id): string|null|object
+    private array $result = [];
+
+
+    /**
+     * @param array $services
+     */
+    public function __construct(array $services)
     {
-        $reflectionClass = new \ReflectionClass($id);
-        $parameters = $reflectionClass->getConstructor()?->getParameters();
+        $this->services = $services;
+    }
 
-        if ($parameters === null) {
-            return new $id();
+
+    /**
+     * @param string $keyService
+     * @return mixed
+     */
+    public function get(string $keyService): mixed
+    {
+        if (array_key_exists($keyService, $this->result)) {
+            dd($keyService);
+            return $this->result[$keyService];
+        }
+        $valueOfCallable = $this->services[$keyService];
+
+        if (is_callable($valueOfCallable) === true) {
+            $valueOfCallable = $valueOfCallable($this);
         }
 
-        $dependencies = [];
-
-        foreach ($parameters as $parameter) {
-            $type = $parameter->getType();
-            if ($type->isBuiltin() === false) {
-                $instance = $this->get($type);
-                $dependencies[] = $instance;
-            }
-        }
-        return $reflectionClass->newInstanceArgs($dependencies);
+        $this->result[$keyService] = $valueOfCallable;
+        return $valueOfCallable;
     }
 
 

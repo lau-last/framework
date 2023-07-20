@@ -13,4 +13,14 @@ require '../vendor/autoload.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-(new Router(Routes::get()))->run(new Request());
+$request = new Request();
+
+try {
+    \Core\App::handle($request);
+} catch (Exception $e) {
+    echo 'Pas bon';
+}
+
+$container = new \Core\DCI\Container(require ROOT.'/config/services.php');
+
+var_dump($container->get(\Core\Render\PHPRender::class));

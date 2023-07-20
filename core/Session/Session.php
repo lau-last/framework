@@ -3,8 +3,11 @@
 namespace Core\Session;
 
 
+use Core\Query\Manager;
+
 class Session
 {
+
 
     /**
      * @return void
